@@ -1,7 +1,7 @@
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Mail, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
-import logo from "@/assets/propline-logo-black.png.asset.json";
+import { BrandLogo } from "@/components/BrandLogo";
 import { COMPANY } from "@/lib/company";
 import { Button } from "@/components/ui/button";
 
@@ -63,7 +63,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo.url} alt="Propline Realty logo" className="h-16 w-auto" />
+            <BrandLogo className="h-16 w-auto max-w-[200px]" />
           </Link>
           <nav className="hidden items-center gap-10 md:flex">
             {NAV.map((n) => (
@@ -94,7 +94,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <footer className="border-t border-border bg-card">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-3">
           <div>
-            <img src={logo.url} alt="Propline Realty" className="h-20 w-auto" />
+            <BrandLogo className="h-24 w-auto max-w-[240px]" />
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               Helping families and businesses find the right home, plot or commercial space — simple and hassle-free.
             </p>

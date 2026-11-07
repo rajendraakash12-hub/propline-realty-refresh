@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import logo from "@/assets/propline-logo-black.png.asset.json";
+import { BrandLogo } from "@/components/BrandLogo";
 import { SiteShell } from "@/components/SiteShell";
 import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/company";
@@ -37,7 +37,7 @@ function About() {
           <Button asChild size="lg" className="mt-10"><Link to="/contact">Talk to our team</Link></Button>
         </div>
         <div className="flex justify-center p-4 sm:p-10">
-          <img src={logo.url} alt="Propline Realty logo" className="w-full max-w-xs md:max-w-md" />
+          <BrandLogo className="h-auto w-full max-w-sm" />
         </div>
       </section>
       <section className="border-t border-border bg-card py-20">
