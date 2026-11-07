@@ -22,10 +22,10 @@ export const Route = createFileRoute("/properties")({
 const ALL = [...CATEGORIES.Residential, ...CATEGORIES.Commercial];
 
 function Properties() {
-  const [type, setType] = useState(ALL[0]);
+  const [type, setType] = useState("");
   const [city, setCity] = useState(CITIES[0]);
   const [budget, setBudget] = useState("");
-  const msg = `Hi Propline Realty, I'm looking for ${type} in ${city}${budget ? ` with a budget of ${budget}` : ""}. Please share available options.`;
+  const msg = `Hi Propline Realty, I'm looking for ${type || "a property"} in ${city}${budget ? ` with a budget of ${budget}` : ""}. Please share available options.`;
   const field = "w-full rounded-lg border border-input bg-background px-4 py-3 text-foreground focus:border-gold focus:outline-none";
 
   return (
@@ -40,6 +40,7 @@ function Properties() {
         <div className="mt-12 grid gap-4 rounded-lg border border-border bg-card p-8 md:grid-cols-4">
           <label className="text-sm text-muted-foreground">Property type
             <select className={`${field} mt-2`} value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="" disabled>Select type</option>
               {ALL.map((t) => <option key={t}>{t}</option>)}
             </select>
           </label>
