@@ -27,17 +27,17 @@ const VALUES = [
 function About() {
   return (
     <SiteShell>
-      <section className="mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 md:grid-cols-2">
+      <section className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:gap-16 md:py-24">
         <div>
           <p className="eyebrow">About us</p>
-          <h1 className="mt-4 text-5xl md:text-6xl">{COMPANY.name}</h1>
+          <h1 className="mt-4 text-4xl md:text-6xl">{COMPANY.name}</h1>
           <p className="mt-6 text-lg text-muted-foreground">
             Propline Realty helps families, investors and businesses find the right residential and commercial property — simply and without hassle. From our office in Koramangala, Bengaluru, we guide clients through search, site visits, negotiation and closing.
           </p>
           <Button asChild size="lg" className="mt-10"><Link to="/contact">Talk to our team</Link></Button>
         </div>
-        <div className="flex justify-center p-10">
-          <img src={logo.url} alt="Propline Realty logo" className="w-full max-w-md" />
+        <div className="flex justify-center p-4 sm:p-10">
+          <img src={logo.url} alt="Propline Realty logo" className="w-full max-w-xs md:max-w-md" />
         </div>
       </section>
       <section className="border-t border-border bg-card py-20">
