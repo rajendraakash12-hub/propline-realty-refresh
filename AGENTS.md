@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Presentation rules
+- Keep shared visual tokens in src/styles.css and use the Button component for actions so all pages share consistent states.
+- Keep motion in the shared SiteShell with progressive enhancement and reduced-motion support so pages remain visible without animation.
+- Category imagery is illustrative, not a property listing; company facts remain centralized in src/lib/company.ts.

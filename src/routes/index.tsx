@@ -1,105 +1,81 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building2, Handshake, Home, Search, ShieldCheck } from "lucide-react";
-import hero from "@/assets/hero-skyline.jpg";
+import { ArrowRight, Handshake, MapPin, Search, ShieldCheck } from "lucide-react";
+import apartments from "@/assets/residential-apartments.jpg";
+import villa from "@/assets/residential-villa.jpg";
+import plots from "@/assets/land-plots.jpg";
+import commercial from "@/assets/commercial-spaces.jpg";
 import { SiteShell } from "@/components/SiteShell";
-import { CATEGORIES, CITIES, COMPANY } from "@/lib/company";
+import { Button } from "@/components/ui/button";
+import { CITIES, COMPANY } from "@/lib/company";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Propline Realty — Find Your Dream Home in Bengaluru" },
-      { name: "description", content: "Propline Realty Services Pvt. Ltd., Koramangala, Bengaluru. Apartments, villas, plots and commercial spaces — simple and hassle-free." },
-      { property: "og:title", content: "Propline Realty — Find Your Dream Home" },
-      { property: "og:description", content: "Residential and commercial property advisory from Koramangala, Bengaluru." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => ({ meta: [
+    { title: "Propline Realty — Homes, Plots & Commercial Spaces" },
+    { name: "description", content: "Find apartments, villas, plots and commercial spaces with Propline Realty Services Pvt. Ltd., Koramangala, Bengaluru." },
+    { property: "og:title", content: "Propline Realty — Find Your Next Space" },
+    { property: "og:description", content: "Residential and commercial property advisory from Koramangala, Bengaluru." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: Index,
 });
 
+const COLLECTIONS = [
+  { title: "Apartments", detail: "A place to call your own", image: apartments, alt: "Illustrative contemporary apartment architecture" },
+  { title: "Homes & villas", detail: "More room for your life", image: villa, alt: "Illustrative villa with a landscaped garden" },
+  { title: "Plots & land", detail: "Space for new possibilities", image: plots, alt: "Illustrative green land and tree-lined landscape" },
+  { title: "Commercial spaces", detail: "Your business, next chapter", image: commercial, alt: "Illustrative contemporary commercial building" },
+];
 const STEPS = [
-  { icon: Search, title: "Search your perfect property", text: "Tell us your city, budget and needs — we shortlist options that genuinely fit." },
-  { icon: ShieldCheck, title: "Expert guidance & support", text: "Site visits, documentation checks and honest advice at every step." },
-  { icon: Handshake, title: "Negotiate the best deal", text: "We represent your interests to close at the right price, on clear terms." },
+  { icon: Search, title: "Find your fit", text: "Tell us your city, budget and needs — we shortlist options that genuinely fit." },
+  { icon: ShieldCheck, title: "See it for yourself", text: "Site visits, documentation checks and honest advice at every step." },
+  { icon: Handshake, title: "Make your move", text: "We represent your interests to close at the right price, on clear terms." },
 ];
 
 function Index() {
-  return (
-    <SiteShell>
-      <section className="relative flex min-h-[88vh] items-center overflow-hidden">
-        <img src={hero} alt="Bengaluru skyline at dusk" width={1920} height={1088} className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/10" />
-        <div className="relative mx-auto w-full max-w-7xl px-6">
-          <p className="eyebrow fade-up">Welcome to Propline Realty</p>
-          <h1 className="fade-up mt-6 max-w-3xl text-5xl leading-[1.05] md:text-7xl">
-            Find your dream home, <span className="text-gold-gradient italic">simple</span> and hassle-free.
-          </h1>
-          <p className="fade-up mt-6 max-w-xl text-lg text-muted-foreground">
-            Apartments, villas, plots and commercial spaces across India's leading cities — guided by a team based in Koramangala, Bengaluru.
-          </p>
-          <div className="fade-up mt-10 flex flex-wrap gap-4">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-sm bg-gold-gradient px-7 py-4 font-semibold text-primary-foreground">
-              Book a site visit <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link to="/properties" className="inline-flex items-center gap-2 rounded-sm border border-gold/50 px-7 py-4 font-semibold text-gold hover:bg-accent">
-              Explore properties
-            </Link>
-          </div>
+  return <SiteShell>
+    <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 md:pb-16 md:pt-16">
+      <div className="fade-up flex items-center gap-2 text-xs font-medium text-muted-foreground"><MapPin className="h-4 w-4 text-accent-foreground" /> Bengaluru roots. New possibilities.</div>
+      <div className="mt-4 flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+        <div className="max-w-3xl">
+          <h1 className="fade-up text-4xl leading-[1.12] sm:text-5xl lg:text-6xl">Propline Realty.<br />Find your <span className="editorial italic">next space.</span></h1>
+          <p className="fade-up mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">A home to grow in. A place to build on. A space for your business. Find the right property, simply and without hassle.</p>
         </div>
-      </section>
+        <Button asChild size="lg" className="fade-up shrink-0"><Link to="/properties">Explore properties <ArrowRight /></Link></Button>
+      </div>
+      <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
+        {COLLECTIONS.map((item, index) => <Link key={item.title} to="/properties" className="property-card group relative isolate block aspect-[4/5] overflow-hidden rounded-lg bg-muted" aria-label={`Explore ${item.title.toLowerCase()}`}>
+          <img src={item.image} alt={item.alt} width={768} height={1024} loading={index < 2 ? "eager" : "lazy"} className="absolute inset-0 h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-image-shade/65 via-image-shade/5 to-image-shade/40" />
+          <div className="absolute inset-x-0 top-0 p-4 text-on-image sm:p-6"><h2 className="text-base font-semibold sm:text-xl">{item.title}</h2><p className="mt-1.5 hidden text-xs text-on-image/90 sm:block">{item.detail}</p></div>
+          <span className="absolute bottom-4 left-4 flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground sm:bottom-6 sm:left-6"><ArrowRight className="card-arrow h-5 w-5" /></span>
+        </Link>)}
+      </div>
+      <p className="mt-3 text-[11px] text-muted-foreground">Category images are illustrative. Contact our team for available properties.</p>
+    </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <p className="eyebrow">What we offer</p>
-        <h2 className="mt-4 text-4xl md:text-5xl">Residential & commercial</h2>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {Object.entries(CATEGORIES).map(([group, items]) => (
-            <div key={group} className="rounded-sm border border-border bg-card p-10">
-              {group === "Residential" ? <Home className="h-8 w-8 text-gold" /> : <Building2 className="h-8 w-8 text-gold" />}
-              <h3 className="mt-6 text-3xl">{group}</h3>
-              <ul className="mt-6 grid grid-cols-2 gap-3 text-sm text-muted-foreground">
-                {items.map((i) => <li key={i} className="border-l border-gold/40 pl-3">{i}</li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+    <section className="bg-primary text-primary-foreground">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-8 gap-y-4 px-6 py-5 text-xs font-medium sm:text-sm">
+        <span className="flex items-center gap-2"><Search className="h-4 w-4" /> Thoughtful shortlisting</span>
+        <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> Guidance at every step</span>
+        <span className="flex items-center gap-2"><Handshake className="h-4 w-4" /> Simple & hassle-free</span>
+      </div>
+    </section>
 
-      <section className="border-y border-border bg-card py-24">
-        <div className="mx-auto max-w-7xl px-6">
-          <p className="eyebrow">How it works</p>
-          <h2 className="mt-4 text-4xl md:text-5xl">Your home, with ease</h2>
-          <div className="mt-14 grid gap-12 md:grid-cols-3">
-            {STEPS.map((s, i) => (
-              <div key={s.title}>
-                <span className="font-display text-6xl text-gold-gradient">0{i + 1}</span>
-                <s.icon className="mt-4 h-6 w-6 text-gold" />
-                <h3 className="mt-4 text-2xl">{s.title}</h3>
-                <p className="mt-3 text-muted-foreground">{s.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    <section className="mx-auto max-w-7xl px-6 py-16 md:py-24">
+      <div className="flex flex-wrap items-end justify-between gap-5"><div><p className="eyebrow">A better way to find property</p><h2 className="mt-3 text-3xl md:text-4xl">Your move. <span className="editorial italic">Our guidance.</span></h2></div><Button asChild variant="outline"><Link to="/about">Meet Propline <ArrowRight /></Link></Button></div>
+      <div className="mt-12 grid gap-10 md:grid-cols-3">
+        {STEPS.map((step, index) => <div key={step.title} data-reveal className="border-t border-border pt-6"><div className="flex items-center justify-between"><span className="text-sm text-muted-foreground">0{index + 1}</span><step.icon className="h-6 w-6" /></div><h3 className="mt-6 text-xl">{step.title}</h3><p className="mt-3 max-w-sm text-sm leading-7 text-muted-foreground">{step.text}</p></div>)}
+      </div>
+    </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-24">
-        <p className="eyebrow">Cities we serve</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          {CITIES.map((c) => (
-            <span key={c} className="rounded-full border border-border px-6 py-3 text-lg font-display hover:border-gold hover:text-gold">{c}</span>
-          ))}
-        </div>
-      </section>
+    <section className="border-y border-border bg-muted py-16">
+      <div className="mx-auto max-w-7xl px-6"><p className="eyebrow">Cities we serve</p><h2 className="mt-3 text-3xl">Find your place, <span className="editorial italic">wherever life takes you.</span></h2><div className="mt-8 flex flex-wrap gap-3">{CITIES.map(city => <span key={city} className="rounded-full border border-border bg-background px-5 py-2.5 text-sm">{city}</span>)}</div></div>
+    </section>
 
-      <section className="mx-auto mb-24 max-w-7xl px-6">
-        <div className="flex flex-col items-start justify-between gap-8 rounded-sm bg-gold-gradient p-12 text-primary-foreground md:flex-row md:items-center">
-          <div>
-            <h2 className="text-4xl">Ready to find your property?</h2>
-            <p className="mt-2 opacity-80">Call us or drop a message — we respond quickly.</p>
-          </div>
-          <a href={`tel:${COMPANY.phoneTel}`} className="rounded-sm bg-background px-8 py-4 font-semibold text-gold">{COMPANY.phoneDisplay}</a>
-        </div>
-      </section>
-    </SiteShell>
-  );
+    <section className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-6 py-16 md:flex-row md:items-center md:py-24">
+      <div><p className="eyebrow">Let's find your next space</p><h2 className="mt-3 text-3xl md:text-4xl">Good things start <span className="editorial italic">with a conversation.</span></h2></div>
+      <Button asChild size="lg"><a href={`tel:${COMPANY.phoneTel}`}>{COMPANY.phoneDisplay} <ArrowRight /></a></Button>
+    </section>
+  </SiteShell>;
 }

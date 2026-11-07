@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import logo from "@/assets/propline-logo.png.asset.json";
+import logo from "@/assets/propline-logo-black.png.asset.json";
 import { SiteShell } from "@/components/SiteShell";
+import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/company";
 
 export const Route = createFileRoute("/about")({
@@ -33,9 +34,9 @@ function About() {
           <p className="mt-6 text-lg text-muted-foreground">
             Propline Realty helps families, investors and businesses find the right residential and commercial property — simply and without hassle. From our office in Koramangala, Bengaluru, we guide clients through search, site visits, negotiation and closing.
           </p>
-          <Link to="/contact" className="mt-10 inline-flex rounded-sm bg-gold-gradient px-7 py-4 font-semibold text-primary-foreground">Talk to our team</Link>
+          <Button asChild size="lg" className="mt-10"><Link to="/contact">Talk to our team</Link></Button>
         </div>
-        <div className="flex justify-center rounded-sm border border-border bg-card p-10">
+        <div className="flex justify-center p-10">
           <img src={logo.url} alt="Propline Realty logo" className="w-full max-w-md" />
         </div>
       </section>

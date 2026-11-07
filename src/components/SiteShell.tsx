@@ -1,8 +1,9 @@
-import { Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Mail, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
-import logo from "@/assets/propline-logo.png.asset.json";
+import logo from "@/assets/propline-logo-black.png.asset.json";
 import { COMPANY } from "@/lib/company";
+import { Button } from "@/components/ui/button";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -13,12 +14,56 @@ const NAV = [
 
 export function SiteShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const mainRef = useRef<HTMLElement>(null);
+  const router = useRouter();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
+  useEffect(() => {
+    const root = mainRef.current;
+    if (!root || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('reveal-pending');
+          entry.target.classList.add('reveal-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    root.querySelectorAll('[data-reveal], section').forEach((element) => {
+      if (element.getBoundingClientRect().top > window.innerHeight * .9) {
+        element.classList.add('reveal-pending');
+        observer.observe(element);
+      }
+    });
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  const navigateWithFade = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || leaving) return;
+    const target = event.target instanceof Element ? event.target.closest('a') : null;
+    const href = target?.getAttribute('href');
+    if (!href || !NAV.some((item) => item.to === href) || href === pathname || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    event.preventDefault();
+    setLeaving(true);
+    window.setTimeout(() => {
+      void router.navigate({ to: href }).finally(() => setLeaving(false));
+    }, 140);
+  };
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground" onClickCapture={navigateWithFade}>
+      <div className="bg-primary text-primary-foreground">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-2.5 text-[11px] sm:text-xs">
+          <span className="flex items-center gap-2"><MapPin className="h-3.5 w-3.5" /> Koramangala, Bengaluru</span>
+          <a href={`mailto:${COMPANY.email}`} className="hidden sm:block">{COMPANY.email}</a>
+          <a href={`tel:${COMPANY.phoneTel}`} className="flex items-center gap-2"><Phone className="h-3.5 w-3.5" />{COMPANY.phoneDisplay}</a>
+        </div>
+      </div>
       <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <Link to="/" className="flex items-center gap-3">
-            <img src={logo.url} alt="Propline Realty logo" className="h-12 w-auto" />
+            <img src={logo.url} alt="Propline Realty logo" className="h-16 w-auto" />
           </Link>
           <nav className="hidden items-center gap-10 md:flex">
             {NAV.map((n) => (
@@ -27,26 +72,24 @@ export function SiteShell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
-          <a href={`tel:${COMPANY.phoneTel}`} className="hidden items-center gap-2 rounded-sm bg-gold-gradient px-5 py-2.5 text-sm font-semibold text-primary-foreground md:inline-flex">
-            <Phone className="h-4 w-4" /> {COMPANY.phoneDisplay}
-          </a>
-          <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+          <Button asChild className="hidden bg-accent text-accent-foreground hover:bg-accent/80 md:inline-flex"><Link to="/contact"><MessageCircle /> Let's talk</Link></Button>
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(!open)} aria-label="Toggle menu" aria-expanded={open} aria-controls="mobile-navigation">
             {open ? <X /> : <Menu />}
-          </button>
+          </Button>
         </div>
-        {open && (
-          <nav className="flex flex-col gap-4 border-t border-border px-6 py-6 md:hidden">
+        <div className={`mobile-menu md:hidden ${open ? 'is-open' : ''}`} inert={!open} id="mobile-navigation">
+          <div className="overflow-hidden"><nav className="flex flex-col gap-4 border-t border-border px-6 py-6">
             {NAV.map((n) => (
               <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="text-lg">
                 {n.label}
               </Link>
             ))}
             <a href={`tel:${COMPANY.phoneTel}`} className="text-gold">{COMPANY.phoneDisplay}</a>
-          </nav>
-        )}
+          </nav></div>
+        </div>
       </header>
 
-      <main>{children}</main>
+      <main ref={mainRef} key={pathname} className={leaving ? 'route-leaving' : 'route-enter'}>{children}</main>
 
       <footer className="border-t border-border bg-card">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-3">
@@ -78,9 +121,10 @@ export function SiteShell({ children }: { children: ReactNode }) {
         </div>
       </footer>
 
-      <a href={COMPANY.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp" className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold-gradient text-primary-foreground shadow-lg transition-transform hover:scale-110">
+      {pathname !== '/contact' && pathname !== '/properties' && <Button asChild size="icon" className="fixed bottom-5 right-5 z-50 h-12 w-12 bg-primary text-primary-foreground shadow-lg">
+      <a href={COMPANY.whatsapp} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
         <MessageCircle className="h-6 w-6" />
-      </a>
+      </a></Button>}
     </div>
   );
 }
